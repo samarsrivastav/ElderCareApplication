@@ -114,7 +114,7 @@ cp env.example .env
 npm run dev
 ```
 
-The backend will start on `http://localhost:5000`
+The backend will start on `http://localhost:5001`
 
 ### 3. Frontend Setup
 
@@ -140,14 +140,14 @@ Ensure MongoDB is running and accessible. The application will automatically cre
 
 ```env
 # Server Configuration
-PORT=5000
+PORT=5001
 NODE_ENV=development
 
 # MongoDB Configuration
-MONGODB_URI=mongodb://localhost:27017/eldercare
+MONGODB_URI=mongodb+srv://samar:Samar123@maincluster.dilmdxs.mongodb.net/?retryWrites=true&w=majority&appName=MainCluster
 
 # JWT Configuration
-JWT_SECRET=your-super-secret-jwt-key-here
+JWT_SECRET=eldercare-super-secret-jwt-key-2024-development
 JWT_EXPIRES_IN=7d
 
 # Security
@@ -162,7 +162,7 @@ CORS_ORIGIN=http://localhost:3000
 ### Frontend (.env)
 
 ```env
-VITE_API_URL=http://localhost:5000/api
+VITE_API_URL=http://localhost:5001/api
 ```
 
 ## 🔐 Authentication & Roles
