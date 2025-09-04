@@ -51,17 +51,17 @@ const HomePage: React.FC = () => {
             <Button 
               type="primary" 
               size="large" 
-              onClick={() => navigate('/register')}
+              onClick={() => navigate('/rooms')}
               className="bg-blue-600 hover:bg-blue-700 h-12 px-8 text-lg"
             >
-              Get Started Today
+              Find Rooms
             </Button>
             <Button 
               size="large" 
-              onClick={() => navigate('/about')}
+              onClick={() => navigate('/compare')}
               className="h-12 px-8 text-lg border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
             >
-              Learn More
+              Compare Rooms
             </Button>
           </Space>
         </div>
@@ -80,11 +80,11 @@ const HomePage: React.FC = () => {
           </div>
           
           <Row gutter={[32, 32]} justify="center">
-            {features.map((feature, index) => (
-              <Col xs={24} sm={12} lg={6} key={index}>
+            {features.map((feature) => (
+              <Col xs={24} sm={12} lg={6} key={feature.title}>
                 <Card 
                   className="text-center h-full border-0 shadow-lg hover:shadow-xl transition-shadow duration-300"
-                  bodyStyle={{ padding: '2rem 1.5rem' }}
+                  styles={{ body: { padding: '2rem 1.5rem' } }}
                 >
                   <div className="mb-4">
                     {feature.icon}
@@ -114,10 +114,10 @@ const HomePage: React.FC = () => {
           <Button 
             type="primary" 
             size="large" 
-            onClick={() => navigate('/register')}
+            onClick={() => navigate('/rooms')}
             className="bg-white text-blue-600 hover:bg-gray-50 h-12 px-8 text-lg font-semibold"
           >
-            Start Your Journey
+            Browse Rooms
           </Button>
         </div>
       </section>

@@ -117,13 +117,19 @@ export const getAllRooms = async (
           pricing: room.pricing,
           roomType: room.roomType,
           occupancy: room.occupancy,
+          lengthOfStay: room.lengthOfStay,
           careLevel: room.careLevel,
+          description: room.description,
+          medicalServices: room.medicalServices,
           lifestyle: room.lifestyle,
           medical: room.medical,
           services: room.services,
           community: room.community,
+          facilities: room.facilities,
           overallRating: room.overallRating,
-          images: room.images.slice(0, 3) // Show only first 3 images in list
+          totalCost: room.pricing.rent + (room.pricing.admissionCharge || 0) + (room.pricing.pettyCashReserve || 0),
+          images: room.images.slice(0, 3), // Show only first 3 images in list
+          contactInfo: room.contactInfo
         })),
         pagination: {
           page: result.page,
