@@ -144,10 +144,10 @@ PORT=5001
 NODE_ENV=development
 
 # MongoDB Configuration
-MONGODB_URI=mongodb+srv://samar:Samar123@maincluster.dilmdxs.mongodb.net/?retryWrites=true&w=majority&appName=MainCluster
+MONGODB_URI=mongodb+srv://<username>:<password>@maincluster.dilmdxs.mongodb.net/?retryWrites=true&w=majority&appName=MainCluster
 
 # JWT Configuration
-JWT_SECRET=eldercare-super-secret-jwt-key-2024-development
+JWT_SECRET=eldercare-super-secret-jwt-key-2025-development
 JWT_EXPIRES_IN=7d
 
 # Security

@@ -105,7 +105,7 @@ export const sampleRooms = [
       ]
     },
     images: [
-      "https://example.com/artha-building.jpg",
+      "https://images.pexels.com/photos/33339522/pexels-photo-33339522.jpeg",
       "https://example.com/artha-caregivers.jpg",
       "https://example.com/artha-support.jpg"
     ],
@@ -206,7 +206,7 @@ export const sampleRooms = [
       ]
     },
     images: [
-      "https://example.com/aurum-building.jpg",
+      "https://images.pexels.com/photos/33339522/pexels-photo-33339522.jpeg",
       "https://example.com/aurum-amenities.jpg"
     ],
     contactInfo: {
@@ -302,7 +302,7 @@ export const sampleRooms = [
       ]
     },
     images: [
-      "https://example.com/nema-luxury.jpg",
+      "https://images.pexels.com/photos/33339522/pexels-photo-33339522.jpeg",
       "https://example.com/nema-amenities.jpg"
     ],
     contactInfo: {
