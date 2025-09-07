@@ -151,6 +151,177 @@ class EmailService {
   }
 
   /**
+   * Send payment confirmation email to customer
+   * @param paymentData - Payment confirmation data
+   */
+  async sendPaymentConfirmation(paymentData: {
+    to: string;
+    customerName: string;
+    roomName: string;
+    paymentType: string;
+    amount: number;
+    currency: string;
+    transactionId: string;
+  }): Promise<void> {
+    const { to, customerName, roomName, paymentType, amount, currency, transactionId } = paymentData;
+    
+    const formatPrice = (amount: number, currency: string): string => {
+      const symbols: { [key: string]: string } = {
+        USD: '$',
+        EUR: '€',
+        GBP: '£',
+        INR: '₹',
+      };
+      const symbol = symbols[currency] || currency;
+      return `${symbol}${amount.toLocaleString()}`;
+    };
+
+    const mailOptions = {
+      from: process.env['SMTP_FROM'],
+      to,
+      subject: `Payment Confirmation - ${roomName}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+          <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <div style="text-align: center; margin-bottom: 30px;">
+              <h1 style="color: #2563eb; margin: 0; font-size: 28px;">🏠 ElderCare</h1>
+              <h2 style="color: #16a34a; margin: 10px 0 0 0; font-size: 24px;">Payment Received!</h2>
+            </div>
+            
+            <div style="background-color: #f0f9ff; padding: 20px; border-radius: 8px; border-left: 4px solid #2563eb; margin-bottom: 25px;">
+              <h3 style="color: #1e40af; margin: 0 0 15px 0;">Dear ${customerName},</h3>
+              <p style="color: #374151; margin: 0; line-height: 1.6;">
+                Thank you for choosing ElderCare! We have received your payment details and are processing your ${paymentType === 'buy' ? 'purchase' : 'rental'} request.
+              </p>
+            </div>
+
+            <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+              <h3 style="color: #374151; margin: 0 0 15px 0; font-size: 18px;">📋 Payment Details</h3>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid #e5e7eb;">
+                  <td style="padding: 8px 0; color: #6b7280; font-weight: 500;">Room:</td>
+                  <td style="padding: 8px 0; color: #374151; font-weight: 600;">${roomName}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e5e7eb;">
+                  <td style="padding: 8px 0; color: #6b7280; font-weight: 500;">Type:</td>
+                  <td style="padding: 8px 0; color: #374151; font-weight: 600; text-transform: capitalize;">${paymentType}</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #e5e7eb;">
+                  <td style="padding: 8px 0; color: #6b7280; font-weight: 500;">Amount:</td>
+                  <td style="padding: 8px 0; color: #16a34a; font-weight: 700; font-size: 18px;">${formatPrice(amount, currency)}${paymentType === 'rent' ? '/month' : ''}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #6b7280; font-weight: 500;">Transaction ID:</td>
+                  <td style="padding: 8px 0; color: #374151; font-weight: 600; font-family: monospace;">${transactionId}</td>
+                </tr>
+              </table>
+            </div>
+
+            <div style="background-color: #fef3c7; padding: 20px; border-radius: 8px; border-left: 4px solid #f59e0b; margin-bottom: 25px;">
+              <h3 style="color: #92400e; margin: 0 0 10px 0;">⏳ What's Next?</h3>
+              <ul style="color: #92400e; margin: 0; padding-left: 20px; line-height: 1.6;">
+                <li>Our team will verify your payment within 24-48 hours</li>
+                <li>You will receive a confirmation email once verified</li>
+                <li>We will contact you shortly to discuss next steps</li>
+                <li>Keep your transaction ID safe for future reference</li>
+              </ul>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+              <p style="color: #6b7280; margin: 0 0 10px 0;">Need help? Contact us:</p>
+              <p style="color: #2563eb; margin: 0; font-weight: 600;">
+                📧 support@eldercare.com | 📞 +1 (555) 123-4567
+              </p>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+              <p style="color: #9ca3af; font-size: 12px; margin: 0;">
+                This is an automated message. Please do not reply to this email.
+              </p>
+            </div>
+          </div>
+        </div>
+      `,
+    };
+
+    try {
+      await this.getTransporter().sendMail(mailOptions);
+      console.log(`Payment confirmation email sent to ${to}`);
+    } catch (error) {
+      console.error('Error sending payment confirmation email:', error);
+      throw new Error('Failed to send payment confirmation email');
+    }
+  }
+
+  /**
+   * Send payment notification to admin
+   * @param paymentData - Payment notification data
+   */
+  async sendPaymentNotification(paymentData: {
+    customerName: string;
+    customerEmail: string;
+    customerPhone?: string;
+    roomName: string;
+    paymentType: string;
+    amount: number;
+    currency: string;
+    transactionId: string;
+  }): Promise<void> {
+    const { customerName, customerEmail, customerPhone, roomName, paymentType, amount, currency, transactionId } = paymentData;
+    
+    const formatPrice = (amount: number, currency: string): string => {
+      const symbols: { [key: string]: string } = {
+        USD: '$',
+        EUR: '€',
+        GBP: '£',
+        INR: '₹',
+      };
+      const symbol = symbols[currency] || currency;
+      return `${symbol}${amount.toLocaleString()}`;
+    };
+
+    const mailOptions = {
+      from: process.env['SMTP_FROM'],
+      to: 'admin@eldercare.com', // Admin email
+      subject: `New Payment Submission - ${roomName}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h2 style="color: #2563eb;">💰 New Payment Submission</h2>
+          
+          <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <h3 style="color: #374151; margin: 0 0 15px 0;">Customer Information</h3>
+            <p><strong>Name:</strong> ${customerName}</p>
+            <p><strong>Email:</strong> ${customerEmail}</p>
+            ${customerPhone ? `<p><strong>Phone:</strong> ${customerPhone}</p>` : ''}
+          </div>
+
+          <div style="background-color: #f0f9ff; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <h3 style="color: #374151; margin: 0 0 15px 0;">Payment Details</h3>
+            <p><strong>Room:</strong> ${roomName}</p>
+            <p><strong>Type:</strong> ${paymentType.charAt(0).toUpperCase() + paymentType.slice(1)}</p>
+            <p><strong>Amount:</strong> ${formatPrice(amount, currency)}${paymentType === 'rent' ? '/month' : ''}</p>
+            <p><strong>Transaction ID:</strong> <code>${transactionId}</code></p>
+          </div>
+
+          <div style="background-color: #fef2f2; padding: 20px; border-radius: 8px;">
+            <p style="color: #dc2626; margin: 0; font-weight: 600;">
+              ⚠️ Action Required: Please verify this payment and update the status in the admin panel.
+            </p>
+          </div>
+        </div>
+      `,
+    };
+
+    try {
+      await this.getTransporter().sendMail(mailOptions);
+      console.log(`Payment notification email sent to admin`);
+    } catch (error) {
+      console.error('Error sending payment notification email:', error);
+      // Don't throw error for admin notification to avoid breaking user experience
+    }
+  }
+
+  /**
    * Verify email service connection
    */
   async verifyConnection(): Promise<boolean> {

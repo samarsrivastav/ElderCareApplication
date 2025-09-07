@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { emailService } from '../services/emailService';
+import { Contact } from '../models/Contact';
 
 /**
  * Contact form submission interface
@@ -52,6 +53,17 @@ export class ContactController {
         });
         return;
       }
+
+      // Save contact form submission to database
+      const contact = new Contact({
+        name,
+        email,
+        phone,
+        subject,
+        message,
+      });
+
+      await contact.save();
 
       // Send confirmation email to user
       await emailService.sendContactConfirmation(email, name, subject, message);

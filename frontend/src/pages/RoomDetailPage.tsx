@@ -73,7 +73,10 @@ const RoomDetailPage: React.FC = () => {
     }
   };
 
-  const formatPrice = (amount: number, currency: string) => {
+  const formatPrice = (amount: number | undefined, currency: string) => {
+    if (amount === undefined || amount === null) {
+      return 'Price not available';
+    }
     const symbol = CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS] || currency;
     return `${symbol}${amount.toLocaleString()}`;
   };
@@ -442,6 +445,28 @@ const RoomDetailPage: React.FC = () => {
                     Add to Compare
                   </Button>
                 </Space>
+
+                {/* Payment Buttons */}
+                {room.totalCost && room.pricing.rent && (
+                  <div className="mt-6 space-y-3">
+                    <Button
+                      type="primary"
+                      size="large"
+                      className="w-full h-14 text-lg font-semibold bg-green-600 hover:bg-green-700 border-green-600"
+                      onClick={() => navigate(`/payment?roomId=${room.id}&type=buy&amount=${room.totalCost}`)}
+                    >
+                      🏠 Buy Now - {formatPrice(room.totalCost, room.pricing.currency)}
+                    </Button>
+                    <Button
+                      type="primary"
+                      size="large"
+                      className="w-full h-14 text-lg font-semibold bg-blue-600 hover:bg-blue-700 border-blue-600"
+                      onClick={() => navigate(`/payment?roomId=${room.id}&type=rent&amount=${room.pricing.rent}`)}
+                    >
+                      📅 Rent Monthly - {formatPrice(room.pricing.rent, room.pricing.currency)}/month
+                    </Button>
+                  </div>
+                )}
               </Card>
             </div>
           </Col>

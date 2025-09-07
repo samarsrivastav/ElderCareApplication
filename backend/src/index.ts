@@ -8,6 +8,7 @@ import { errorHandler } from './middleware/errorHandler';
 import { notFound } from './middleware/notFound';
 import roomRoutes from './routes/roomRoutes';
 import contactRoutes from './routes/contactRoutes';
+import paymentRoutes from './routes/paymentRoutes';
 
 // Load environment variables
 dotenv.config({ path: '.env' });
@@ -52,6 +53,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Routes
 app.use('/api/rooms', roomRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // Health check endpoint
 app.get('/health', (_req, res) => {
@@ -71,9 +73,10 @@ const startServer = async (): Promise<void> => {
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📊 Environment: ${process.env['NODE_ENV']}`);
-      console.log(`🔗 Health check: http://localhost:${PORT}/health`);
-      console.log(`🏠 Room API: http://localhost:${PORT}/api/rooms`);
-      console.log(`📧 Contact API: http://localhost:${PORT}/api/contact`);
+console.log(`🔗 Health check: http://localhost:${PORT}/health`);
+console.log(`🏠 Room API: http://localhost:${PORT}/api/rooms`);
+console.log(`📧 Contact API: http://localhost:${PORT}/api/contact`);
+console.log(`💰 Payment API: http://localhost:${PORT}/api/payments`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);
