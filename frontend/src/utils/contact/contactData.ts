@@ -37,18 +37,6 @@ export const getFacilityLocationsData = () => [
     address: '123 Care Street, Health City, HC 12345',
     phone: '+1 (555) 123-4567',
     services: ['Assisted Living', 'Memory Care', 'Rehabilitation']
-  },
-  {
-    name: 'North Branch',
-    address: '456 Wellness Avenue, Health City, HC 12346',
-    phone: '+1 (555) 234-5678',
-    services: ['Independent Living', 'Day Care', 'Respite Care']
-  },
-  {
-    name: 'South Branch',
-    address: '789 Comfort Lane, Health City, HC 12347',
-    phone: '+1 (555) 345-6789',
-    services: ['Skilled Nursing', 'Hospice Care', 'Family Support']
   }
 ];
 

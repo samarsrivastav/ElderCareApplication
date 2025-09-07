@@ -11,11 +11,14 @@ import {
   Spin,
   Alert,
   List,
-  Image,
   Rate,
   Tabs,
   Badge,
+  Modal,
+  Carousel,
 } from 'antd';
+import ImageWithFallback from '../components/ImageWithFallback';
+import ImageCollage from '../components/ImageCollage';
 import {
   ArrowLeftOutlined,
   EnvironmentOutlined,
@@ -43,6 +46,8 @@ const RoomDetailPage: React.FC = () => {
   const [room, setRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isCarouselVisible, setIsCarouselVisible] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     if (id) {
@@ -81,6 +86,31 @@ const RoomDetailPage: React.FC = () => {
       daycare: 'purple',
     };
     return colors[type as keyof typeof colors] || 'default';
+  };
+
+  /**
+   * Handle image click to open carousel modal
+   * @param index - Index of the clicked image
+   */
+  const handleImageClick = (index: number): void => {
+    setCurrentImageIndex(index);
+    setIsCarouselVisible(true);
+  };
+
+  /**
+   * Close the carousel modal
+   */
+  const handleCloseCarousel = (): void => {
+    setIsCarouselVisible(false);
+  };
+
+  /**
+   * Handle keyboard navigation in carousel
+   */
+  const handleCarouselKeyDown = (e: React.KeyboardEvent): void => {
+    if (e.key === 'Escape') {
+      handleCloseCarousel();
+    }
   };
 
   const getCareLevelColor = (level: string) => {
@@ -181,24 +211,15 @@ const RoomDetailPage: React.FC = () => {
                 </div>
               </div>
 
-              {room.images && room.images.length > 0 && (
-                <div className="mb-6">
-                  <Image.PreviewGroup>
-                    <Row gutter={[8, 8]}>
-                      {room.images.map((image, index) => (
-                        <Col key={index} xs={24} sm={12} md={8}>
-                          <Image
-                            src={image}
-                            alt={`${room.name} - Image ${index + 1}`}
-                            className="w-full h-48 object-cover rounded"
-                            fallback="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMIAAADDCAYAAADQvc6UAAABRWlDQ1BJQ0MgUHJvZmlsZQAAKJFjYGASSSwoyGFhYGDIzSspCnJ3UoiIjFJgf8LAwSDCIMogwMCcmFxc4BgQ4ANUwgCjUcG3awyMIPqyLsis7PPOq3QdDFcvjV3jOD1boQVTPQrgSkktTgbSf4A4LbmgqISBgTEFyFYuLykAsTuAbJEioKOA7DkgdjqEvQHEToKwj4DVhAQ5A9k3gGyB5IxEoBmML4BsnSQk8XQkNtReEOBxcfXxUQg1Mjc0dyHgXNJBSWpFCYh2zi+oLMpMzyhRcASGUqqCZ16yno6CkYGRAQMDKMwhqj/fAIcloxgHQqxAjIHBEugw5sUIsSQpBobtQPdLciLEVJYzMPBHMDBsayhILEqEO4DxG0txmrERhM29nYGBddr//5/DGRjYNRkY/l7////39v///y4Dmn+LgeHANwDrkl1AuO+pmgAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAwqADAAQAAAABAAAAwwAAAAD9b/HnAAAHlklEQVR4Ae3dP3Ik1RnG4W+FgYxN"
-                          />
-                        </Col>
-                      ))}
-                    </Row>
-                  </Image.PreviewGroup>
-                </div>
-              )}
+              <div className="mb-6">
+                <ImageCollage
+                  images={room.images || []}
+                  altPrefix={`${room.name} - Image`}
+                  onViewMore={() => handleImageClick(0)}
+                  onImageClick={handleImageClick}
+                  height="400px"
+                />
+              </div>
 
               <Tabs defaultActiveKey="overview">
                 <TabPane tab="Overview" key="overview">
@@ -426,6 +447,47 @@ const RoomDetailPage: React.FC = () => {
           </Col>
         </Row>
       </div>
+
+      {/* Image Carousel Modal */}
+      <Modal
+        title={`${room?.name} - Images`}
+        open={isCarouselVisible}
+        onCancel={handleCloseCarousel}
+        footer={null}
+        width="90vw"
+        style={{ maxWidth: '1200px' }}
+        centered
+        className="image-carousel-modal"
+      >
+        {room?.images && room.images.length > 0 && (
+          <Carousel
+            initialSlide={currentImageIndex}
+            dots={true}
+            infinite={room.images.length > 1}
+            speed={500}
+            slidesToShow={1}
+            slidesToScroll={1}
+            adaptiveHeight={true}
+            arrows={true}
+            className="image-carousel"
+          >
+            {room.images.map((image, index) => (
+              <div key={`carousel-${room.id}-${image.slice(-10)}-${index}`}>
+                <div className="flex justify-center items-center min-h-[400px] max-h-[70vh]">
+                  <ImageWithFallback
+                    src={image}
+                    alt={`${room.name} - Image ${index + 1}`}
+                    className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
+                  />
+                </div>
+                <div className="text-center mt-4 text-gray-600">
+                  Image {index + 1} of {room.images.length}
+                </div>
+              </div>
+            ))}
+          </Carousel>
+        )}
+      </Modal>
     </div>
   );
 };

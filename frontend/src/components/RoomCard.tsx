@@ -1,8 +1,12 @@
-import React from 'react';
-import { Card, Rate, Tag, Button, Row, Col } from 'antd';
-import { EnvironmentOutlined, PhoneOutlined, EyeOutlined, SwapOutlined } from '@ant-design/icons';
-import { Room } from '../types/room';
-import { CURRENCY_SYMBOLS } from '../constants';
+import React from "react";
+import { Card, Rate, Tag } from "antd";
+import {
+  EnvironmentOutlined,
+  SwapOutlined,
+} from "@ant-design/icons";
+import { Room } from "../types/room";
+import { CURRENCY_SYMBOLS } from "../constants";
+import ImageWithFallback from "./ImageWithFallback";
 
 interface RoomCardProps {
   room: Room;
@@ -22,55 +26,60 @@ const RoomCard: React.FC<RoomCardProps> = ({
   onViewDetails,
   onAddToCompare,
   isInCompareList = false,
-  className = '',
+  className = "",
 }) => {
   const formatPrice = (amount: number | undefined, currency: string) => {
-    if (!amount) return 'N/A';
-    const symbol = CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS] || currency;
+    if (!amount) return "N/A";
+    const symbol =
+      CURRENCY_SYMBOLS[currency as keyof typeof CURRENCY_SYMBOLS] || currency;
     return `${symbol}${amount.toLocaleString()}`;
   };
 
   const getRoomTypeColor = (type: string) => {
     const colors = {
-      assisted_living: 'blue',
-      independent_living: 'green',
-      memory_care: 'orange',
-      daycare: 'purple',
+      assisted_living: "blue",
+      independent_living: "green",
+      memory_care: "orange",
+      daycare: "purple",
     };
-    return colors[type as keyof typeof colors] || 'default';
+    return colors[type as keyof typeof colors] || "default";
   };
 
   const getCareLevelColor = (level: string) => {
     const colors = {
-      high: 'red',
-      medium: 'orange',
-      low: 'green',
+      high: "red",
+      medium: "orange",
+      low: "green",
     };
-    return colors[level as keyof typeof colors] || 'default';
+    return colors[level as keyof typeof colors] || "default";
   };
 
   return (
     <Card
       hoverable
-      className={`h-full ${className}`}
+      className={`h-full flex flex-col cursor-pointer ${className}`}
+      onClick={() => onViewDetails(room.id)}
       cover={
         <div className="relative h-48 bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
           {room.images && room.images.length > 0 ? (
-            <img
+            <ImageWithFallback
               alt={room.name}
               src={room.images[0]}
               className="w-full h-full object-cover"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.style.display = 'none';
-                target.nextElementSibling?.classList.remove('hidden');
-              }}
             />
-          ) : null}
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gray-100">
+              <ImageWithFallback
+                alt="No image available"
+                src=""
+                className="w-16 h-16 opacity-50"
+              />
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
           <div className="absolute top-4 right-4">
             <Tag color={getRoomTypeColor(room.roomType)} className="capitalize">
-              {room.roomType.replace('_', ' ')}
+              {room.roomType.replace("_", " ")}
             </Tag>
           </div>
           <div className="absolute bottom-4 left-4 text-white">
@@ -89,76 +98,89 @@ const RoomCard: React.FC<RoomCardProps> = ({
         </div>
       }
       actions={[
-        <Button
-          key="view"
-          type="primary"
-          icon={<EyeOutlined />}
-          onClick={() => onViewDetails(room.id)}
-          className="w-full"
-        >
-          View Details
-        </Button>,
-        <Button
+        <button
           key="compare"
-          icon={<SwapOutlined />}
-          onClick={() => onAddToCompare(room.id)}
-          disabled={isInCompareList}
-          className="w-full"
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onAddToCompare(room.id);
+          }}
+          className={`w-full h-12 m-0 mb-0 p-0 flex items-center justify-center cursor-pointer transition-colors duration-200 border-0 rounded-b-lg ${
+            isInCompareList
+              ? "bg-green-50 hover:bg-green-100 text-green-600 hover:text-green-700"
+              : "bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700"
+          }`}
         >
-          {isInCompareList ? 'Added' : 'Compare'}
-        </Button>,
+          <SwapOutlined className="mr-2" />
+          <span className="font-medium">
+            {isInCompareList ? "Remove from Compare" : "Add to Compare"}
+          </span>
+        </button>,
       ]}
+      styles={{
+        body: { flex: 1, display: "flex", flexDirection: "column" },
+        actions: {
+          margin: 0,
+          padding: 0,
+          marginTop: 0,
+          marginBottom: 0,
+          borderTop: "none",
+          borderBottom: "none",
+          borderRadius: "0 0 8px 8px",
+        },
+      }}
     >
-      <div className="space-y-3">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-2">
-            {room.name}
-          </h3>
-          <p className="text-sm text-gray-600 mb-2">{room.facilityName}</p>
-        </div>
-
-        <div className="flex items-center text-sm text-gray-500 mb-2">
-          <EnvironmentOutlined className="mr-1" />
-          <span>{room.location.area}, {room.location.city}</span>
-        </div>
-
-        <Row gutter={[8, 8]}>
-          <Col span={12}>
-            <div className="text-center p-2 bg-gray-50 rounded">
-              <div className="text-lg font-bold text-primary-600">
-                {formatPrice(room.pricing.rent, room.pricing.currency)}
-              </div>
-              <div className="text-xs text-gray-500">Monthly Rent</div>
-            </div>
-          </Col>
-          <Col span={12}>
-            <div className="text-center p-2 bg-gray-50 rounded">
-              <div className="text-lg font-bold text-green-600">
-                {formatPrice(room.totalCost, room.pricing.currency)}
-              </div>
-              <div className="text-xs text-gray-500">Total Cost</div>
-            </div>
-          </Col>
-        </Row>
-
-        <div className="flex flex-wrap gap-1">
-          <Tag color={getCareLevelColor(room.careLevel)}>
-            {room.careLevel} care
-          </Tag>
-          <Tag color="blue">
-            {room.occupancy}
-          </Tag>
-          <Tag color="purple">
-            {room.lengthOfStay} term
-          </Tag>
-        </div>
-
-        {room.contactInfo?.phone && (
-          <div className="flex items-center text-sm text-gray-500">
-            <PhoneOutlined className="mr-1" />
-            <span>{room.contactInfo.phone}</span>
+      <div className="flex-1 flex flex-col">
+        <div className="space-y-4 flex-1">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2 truncate" title={room.name}>
+              {room.name}
+            </h3>
+            <p className="text-sm text-gray-600 mb-3 truncate" title={room.facilityName}>
+              {room.facilityName}
+            </p>
           </div>
-        )}
+
+          <div className="flex items-center text-sm text-gray-500 mb-3">
+            <EnvironmentOutlined className="mr-1 flex-shrink-0" />
+            <span className="truncate" title={`${room.location.area}, ${room.location.city}`}>
+              {room.location.area}, {room.location.city}
+            </span>
+          </div>
+
+           {/* Pricing Section */}
+           <div className="grid grid-cols-2 gap-3">
+             <div className="text-center p-3 bg-gray-50 rounded-lg">
+               <div className="text-lg font-bold text-primary-600">
+                 {formatPrice(room.pricing.rent, room.pricing.currency)}
+               </div>
+               <div className="text-xs text-gray-500">Monthly Rent</div>
+             </div>
+             <div className="text-center p-3 bg-green-50 rounded-lg">
+               <div className="text-lg font-bold text-green-600">
+                 {formatPrice(room.totalCost, room.pricing.currency)}
+               </div>
+               <div className="text-xs text-gray-500">Total Cost</div>
+             </div>
+           </div>
+
+           {/* Tags Section - Each tag on separate line */}
+           <div className="space-y-2">
+             <Tag
+               color={getCareLevelColor(room.careLevel)}
+               className="w-full text-center justify-center"
+             >
+               {room.careLevel} care
+             </Tag>
+             <Tag color="blue" className="w-full text-center justify-center">
+               {room.occupancy}
+             </Tag>
+             <Tag color="purple" className="w-full text-center justify-center">
+               {room.lengthOfStay} term
+             </Tag>
+           </div>
+
+        </div>
       </div>
     </Card>
   );

@@ -94,9 +94,14 @@ const RoomsPage: React.FC = () => {
     navigate(`/rooms/${roomId}`);
   };
 
-  const handleAddToCompare = (roomId: string) => {
-    if (compareList.includes(roomId)) return;
+  const handleToggleCompare = (roomId: string) => {
+    if (compareList.includes(roomId)) {
+      // Remove from compare list
+      setCompareList(prev => prev.filter(id => id !== roomId));
+      return;
+    }
     
+    // Add to compare list
     if (compareList.length >= 5) {
       // Remove the first item if we're at the limit
       setCompareList(prev => [...prev.slice(1), roomId]);
@@ -156,13 +161,13 @@ const RoomsPage: React.FC = () => {
 
     return (
       <>
-        <Row gutter={[24, 24]}>
+        <Row gutter={[16, 16]}>
           {rooms.map((room) => (
-            <Col key={room.id} xs={24} sm={12} lg={8} xl={6}>
+            <Col key={room.id} xs={24} sm={12} md={12} lg={8} xl={8}>
               <RoomCard
                 room={room}
                 onViewDetails={handleViewDetails}
-                onAddToCompare={handleAddToCompare}
+                onAddToCompare={handleToggleCompare}
                 isInCompareList={compareList.includes(room.id)}
               />
             </Col>
@@ -191,13 +196,13 @@ const RoomsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-              <Title level={2} className="mb-2">
+              <Title level={2} className="mb-2 text-xl sm:text-2xl">
                 Find Your Perfect Room
               </Title>
-              <Text className="text-gray-600">
+              <Text className="text-gray-600 text-sm sm:text-base hidden sm:block">
                 Discover the best elder care facilities tailored to your needs
               </Text>
             </div>
@@ -208,37 +213,52 @@ const RoomsPage: React.FC = () => {
                 size="large"
                 onClick={handleCompareRooms}
                 disabled={compareList.length < 2}
+                className="hidden sm:flex"
               >
                 Compare Rooms ({compareList.length})
               </Button>
             )}
           </div>
 
-          <div className="mt-6">
+          <div className="mt-4 sm:mt-6">
             <SearchBar
               onSearch={handleSearch}
               className="max-w-2xl"
             />
           </div>
 
-          <div className="mt-4 flex justify-between items-center">
-            <Space>
+          <div className="mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+            <Space className="flex-wrap">
               <Button
                 icon={<FilterOutlined />}
                 onClick={() => setFiltersVisible(true)}
-                className="lg:hidden"
+                className="md:hidden"
+                size="small"
               >
                 Filters
               </Button>
-              <Text className="text-gray-600">
+              <Text className="text-gray-600 text-sm">
                 {pagination.total} rooms found
               </Text>
+              {compareList.length > 0 && (
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={handleCompareRooms}
+                  disabled={compareList.length < 2}
+                  className="sm:hidden"
+                >
+                  Compare ({compareList.length})
+                </Button>
+              )}
             </Space>
             
             <Button
               icon={<ReloadOutlined />}
               onClick={fetchRooms}
               loading={loading}
+              size="small"
+              className="self-start sm:self-auto"
             >
               Refresh
             </Button>
@@ -246,9 +266,9 @@ const RoomsPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Row gutter={[24, 24]}>
-          <Col xs={0} lg={6}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <Row gutter={[16, 16]}>
+          <Col xs={0} md={0} lg={6} xl={6}>
             <div className="sticky top-4">
               <RoomFilters
                 filters={filters}
@@ -258,7 +278,7 @@ const RoomsPage: React.FC = () => {
             </div>
           </Col>
           
-          <Col xs={24} lg={18}>
+          <Col xs={24} md={24} lg={18} xl={18}>
             {renderContent()}
           </Col>
         </Row>

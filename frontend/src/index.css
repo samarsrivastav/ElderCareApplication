@@ -83,4 +83,61 @@
   .input-field {
     @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
   }
+  
+  /* Image Carousel Modal Styles */
+  .image-carousel-modal .ant-modal-body {
+    padding: 0;
+  }
+  
+  .image-carousel .slick-dots {
+    bottom: 20px;
+  }
+  
+  .image-carousel .slick-dots li button {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+  }
+  
+  .image-carousel .slick-dots li.slick-active button {
+    background: #1890ff;
+  }
+  
+  .image-carousel .slick-prev,
+  .image-carousel .slick-next {
+    z-index: 10;
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .image-carousel .slick-prev {
+    left: 20px;
+  }
+  
+  .image-carousel .slick-next {
+    right: 20px;
+  }
+  
+  .image-carousel .slick-prev:before,
+  .image-carousel .slick-next:before {
+    font-size: 20px;
+    color: white;
+    opacity: 1;
+  }
+  
+  .image-carousel .slick-prev:hover,
+  .image-carousel .slick-next:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+  
+  .image-carousel .slick-prev.slick-disabled,
+  .image-carousel .slick-next.slick-disabled {
+    opacity: 0.3;
+  }
 }

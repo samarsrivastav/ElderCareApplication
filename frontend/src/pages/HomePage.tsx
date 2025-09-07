@@ -38,28 +38,28 @@ const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-20 px-6">
+      <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-12 sm:py-20 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <Title level={1} className="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
+          <Title level={1} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4 sm:mb-6">
             Caring for Your Loved Ones
           </Title>
-          <Paragraph className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <Paragraph className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto">
             Professional elder care services that provide comfort, dignity, and quality of life 
             for your family members. Our compassionate team ensures personalized care in a safe environment.
           </Paragraph>
-          <Space size="large">
+          <Space size="large" direction="vertical" className="sm:flex-row">
             <Button 
               type="primary" 
               size="large" 
               onClick={() => navigate('/rooms')}
-              className="bg-blue-600 hover:bg-blue-700 h-12 px-8 text-lg"
+              className="bg-blue-600 hover:bg-blue-700 h-12 px-8 text-lg w-full sm:w-auto"
             >
               Find Rooms
             </Button>
             <Button 
               size="large" 
               onClick={() => navigate('/compare')}
-              className="h-12 px-8 text-lg border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
+              className="h-12 px-8 text-lg border-2 border-blue-600 text-blue-600 hover:bg-blue-50 w-full sm:w-auto"
             >
               Compare Rooms
             </Button>
@@ -68,31 +68,31 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-6 bg-white">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <Title level={2} className="text-4xl font-bold text-gray-800 mb-4">
+          <div className="text-center mb-12 sm:mb-16">
+            <Title level={2} className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4">
               Why Choose ElderCare?
             </Title>
-            <Paragraph className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <Paragraph className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
               We combine technology, expertise, and compassion to deliver exceptional care services.
             </Paragraph>
           </div>
           
-          <Row gutter={[32, 32]} justify="center">
+          <Row gutter={[16, 16]} justify="center">
             {features.map((feature) => (
-              <Col xs={24} sm={12} lg={6} key={feature.title}>
+              <Col xs={24} sm={12} md={8} lg={6} key={feature.title}>
                 <Card 
                   className="text-center h-full border-0 shadow-lg hover:shadow-xl transition-shadow duration-300"
-                  styles={{ body: { padding: '2rem 1.5rem' } }}
+                  styles={{ body: { padding: '1.5rem 1rem' } }}
                 >
                   <div className="mb-4">
                     {feature.icon}
                   </div>
-                  <Title level={3} className="text-xl font-semibold text-gray-800 mb-3">
+                  <Title level={3} className="text-lg sm:text-xl font-semibold text-gray-800 mb-3">
                     {feature.title}
                   </Title>
-                  <Paragraph className="text-gray-600">
+                  <Paragraph className="text-gray-600 text-sm sm:text-base">
                     {feature.description}
                   </Paragraph>
                 </Card>
@@ -103,19 +103,19 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-blue-600 py-20 px-6">
+      <section className="bg-blue-600 py-12 sm:py-20 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <Title level={2} className="text-4xl font-bold text-white mb-6">
+          <Title level={2} className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6" style={{ color: 'white' }}>
             Ready to Get Started?
           </Title>
-          <Paragraph className="text-xl text-blue-100 mb-8">
+          <Paragraph className="text-lg sm:text-xl text-blue-100 mb-6 sm:mb-8">
             Join thousands of families who trust ElderCare for their loved ones' well-being.
           </Paragraph>
           <Button 
             type="primary" 
             size="large" 
             onClick={() => navigate('/rooms')}
-            className="bg-white text-blue-600 hover:bg-gray-50 h-12 px-8 text-lg font-semibold"
+            className="bg-white text-blue-600 hover:bg-gray-50 h-12 px-8 text-lg font-semibold w-full sm:w-auto"
           >
             Browse Rooms
           </Button>

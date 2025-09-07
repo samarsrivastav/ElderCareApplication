@@ -57,72 +57,71 @@ const RoomFilters: React.FC<RoomFiltersProps> = ({
         </Button>
       }
     >
-      <Space direction="vertical" size="middle" className="w-full">
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12} md={8}>
-            <div>
-              <label htmlFor="room-type-select" className="block text-sm font-medium text-gray-700 mb-2">
-                Room Type
-              </label>
-              <Select
-                id="room-type-select"
-                placeholder="Select room type"
-                value={filters.roomType}
-                onChange={(value) => handleFilterChange('roomType', value)}
-                options={roomTypeOptions}
-                className="w-full"
-                allowClear
-              />
-            </div>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <div>
-              <label htmlFor="city-select" className="block text-sm font-medium text-gray-700 mb-2">
-                City
-              </label>
-              <Select
-                id="city-select"
-                placeholder="Select city"
-                value={filters.city}
-                onChange={(value) => handleFilterChange('city', value)}
-                className="w-full"
-                allowClear
-              >
-                <Select.Option value="Gurugram">Gurugram</Select.Option>
-                <Select.Option value="Delhi">Delhi</Select.Option>
-                <Select.Option value="Mumbai">Mumbai</Select.Option>
-                <Select.Option value="Bangalore">Bangalore</Select.Option>
-              </Select>
-            </div>
-          </Col>
-          <Col xs={24} sm={12} md={8}>
-            <div>
-              <label htmlFor="area-select" className="block text-sm font-medium text-gray-700 mb-2">
-                Area
-              </label>
-              <Select
-                id="area-select"
-                placeholder="Select area"
-                value={filters.area}
-                onChange={(value) => handleFilterChange('area', value)}
-                className="w-full"
-                allowClear
-              >
-                <Select.Option value="Sector 53">Sector 53</Select.Option>
-                <Select.Option value="Sector 54">Sector 54</Select.Option>
-                <Select.Option value="Sector 56">Sector 56</Select.Option>
-              </Select>
-            </div>
-          </Col>
-        </Row>
+      <Space direction="vertical" size="large" className="w-full">
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="room-type-select" className="block text-sm font-medium text-gray-700 mb-2">
+              Room Type
+            </label>
+            <Select
+              id="room-type-select"
+              placeholder="Select room type"
+              value={filters.roomType}
+              onChange={(value) => handleFilterChange('roomType', value)}
+              options={roomTypeOptions}
+              className="w-full"
+              allowClear
+              size="middle"
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="city-select" className="block text-sm font-medium text-gray-700 mb-2">
+              City
+            </label>
+            <Select
+              id="city-select"
+              placeholder="Select city"
+              value={filters.city}
+              onChange={(value) => handleFilterChange('city', value)}
+              className="w-full"
+              allowClear
+              size="middle"
+            >
+              <Select.Option value="Gurugram">Gurugram</Select.Option>
+              <Select.Option value="Delhi">Delhi</Select.Option>
+              <Select.Option value="Mumbai">Mumbai</Select.Option>
+              <Select.Option value="Bangalore">Bangalore</Select.Option>
+            </Select>
+          </div>
+          
+          <div>
+            <label htmlFor="area-select" className="block text-sm font-medium text-gray-700 mb-2">
+              Area
+            </label>
+            <Select
+              id="area-select"
+              placeholder="Select area"
+              value={filters.area}
+              onChange={(value) => handleFilterChange('area', value)}
+              className="w-full"
+              allowClear
+              size="middle"
+            >
+              <Select.Option value="Sector 53">Sector 53</Select.Option>
+              <Select.Option value="Sector 54">Sector 54</Select.Option>
+              <Select.Option value="Sector 56">Sector 56</Select.Option>
+            </Select>
+          </div>
+        </div>
 
-        <Row gutter={[16, 16]}>
+        <Row gutter={[16, 20]}>
           <Col xs={24} sm={12}>
-            <div>
-              <label htmlFor="rent-range-slider" className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="h-full">
+              <label htmlFor="rent-range-slider" className="block text-sm font-medium text-gray-700 mb-3">
                 Rent Range (₹)
               </label>
-              <div className="px-2">
+              <div className="px-3">
                 <Slider
                   range
                   min={0}
@@ -146,11 +145,11 @@ const RoomFilters: React.FC<RoomFiltersProps> = ({
             </div>
           </Col>
           <Col xs={24} sm={12}>
-            <div>
-              <label htmlFor="rating-slider" className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="h-full">
+              <label htmlFor="rating-slider" className="block text-sm font-medium text-gray-700 mb-3">
                 Minimum Rating
               </label>
-              <div className="px-2">
+              <div className="px-3">
                 <Slider
                   min={1}
                   max={10}
@@ -161,7 +160,7 @@ const RoomFilters: React.FC<RoomFiltersProps> = ({
                     formatter: (value) => `${value}/10`,
                   }}
                 />
-                <div className="text-center text-sm text-gray-500 mt-2">
+                <div className="text-center text-sm text-gray-500 mt-3">
                   {(filters.minRating || 1).toFixed(1)}/10
                 </div>
               </div>
