@@ -33,6 +33,10 @@ const Navbar: React.FC = () => {
       label: 'Compare'
     },
     {
+      key: '/blog',
+      label: 'Blog'
+    },
+    {
       key: '/about',
       label: 'About'
     },
@@ -51,11 +55,13 @@ const Navbar: React.FC = () => {
             className="flex items-center cursor-pointer bg-transparent border-none p-0"
             onClick={() => navigate('/')}
           >
-            <div className="text-xl sm:text-2xl font-bold text-blue-600 mr-2">
-              🏥
-            </div>
+            <img 
+              src="/AGEVAA.jpeg" 
+              alt="AGEVAA Logo" 
+              className="h-8 w-8 sm:h-10 sm:w-10 mr-2 object-contain"
+            />
             <span className="text-lg sm:text-xl font-semibold text-gray-800">
-              ElderCare
+              AGEVAA
             </span>
           </button>
 
@@ -77,7 +83,7 @@ const Navbar: React.FC = () => {
           {/* Contact Info - Hidden on small screens */}
           <div className="hidden lg:flex items-center space-x-4">
             <span className="text-gray-600 text-sm">
-              Elder Care Services
+              Senior Living Solutions
             </span>
           </div>
 

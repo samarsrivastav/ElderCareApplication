@@ -72,7 +72,7 @@ const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
             <Title level={2} className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-              Why Choose ElderCare?
+              Why Choose AGEVAA?
             </Title>
             <Paragraph className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
               We combine technology, expertise, and compassion to deliver exceptional care services.
@@ -109,7 +109,7 @@ const HomePage: React.FC = () => {
             Ready to Get Started?
           </Title>
           <Paragraph className="text-lg sm:text-xl text-blue-100 mb-6 sm:mb-8">
-            Join thousands of families who trust ElderCare for their loved ones' well-being.
+            Join thousands of families who trust AGEVAA for their loved ones' well-being.
           </Paragraph>
           <Button 
             type="primary" 

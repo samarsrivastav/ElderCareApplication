@@ -107,14 +107,6 @@ const RoomDetailPage: React.FC = () => {
     setIsCarouselVisible(false);
   };
 
-  /**
-   * Handle keyboard navigation in carousel
-   */
-  const handleCarouselKeyDown = (e: React.KeyboardEvent): void => {
-    if (e.key === 'Escape') {
-      handleCloseCarousel();
-    }
-  };
 
   const getCareLevelColor = (level: string) => {
     const colors = {

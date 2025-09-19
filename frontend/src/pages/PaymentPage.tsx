@@ -8,7 +8,6 @@ import {
   Typography,
   Space,
   Alert,
-  Upload,
   Image,
   Spin,
   message,
@@ -17,7 +16,6 @@ import {
 } from 'antd';
 import {
   ArrowLeftOutlined,
-  UploadOutlined,
   CopyOutlined,
 } from '@ant-design/icons';
 import { roomService } from '../services/roomService';
@@ -54,7 +52,7 @@ const PaymentPage: React.FC = () => {
   const amount = searchParams.get('amount');
 
   // UPI ID for payments
-  const UPI_ID = 'eldercare@paytm';
+  const UPI_ID = 'agevaa@paytm';
   const UPI_QR_CODE = '/upi-qr-code.svg';
 
   useEffect(() => {

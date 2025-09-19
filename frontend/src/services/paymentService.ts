@@ -29,7 +29,7 @@ class PaymentService {
   private baseUrl: string;
 
   constructor() {
-    this.baseUrl = process.env.NODE_ENV === 'production'
+    this.baseUrl = import.meta.env.PROD
       ? 'https://your-production-api.com/api'
       : 'http://localhost:5001/api';
   }

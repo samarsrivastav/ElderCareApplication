@@ -11,7 +11,7 @@ export const getContactInfoData = () => [
   {
     icon: 'MailOutlined',
     title: 'Email',
-    details: ['info@eldercare.com', 'support@eldercare.com'],
+    details: ['admin@agevaa.com', 'contact@agevaa.com'],
     description: 'We respond within 2 hours'
   },
   {

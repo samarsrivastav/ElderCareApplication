@@ -9,6 +9,8 @@ import { notFound } from './middleware/notFound';
 import roomRoutes from './routes/roomRoutes';
 import contactRoutes from './routes/contactRoutes';
 import paymentRoutes from './routes/paymentRoutes';
+import adminRoutes from './routes/adminRoutes';
+import blogRoutes from './routes/blogRoutes';
 
 // Load environment variables
 dotenv.config({ path: '.env' });
@@ -54,6 +56,8 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/api/rooms', roomRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/blogs', blogRoutes);
 
 // Health check endpoint
 app.get('/health', (_req, res) => {
@@ -77,6 +81,8 @@ console.log(`🔗 Health check: http://localhost:${PORT}/health`);
 console.log(`🏠 Room API: http://localhost:${PORT}/api/rooms`);
 console.log(`📧 Contact API: http://localhost:${PORT}/api/contact`);
 console.log(`💰 Payment API: http://localhost:${PORT}/api/payments`);
+console.log(`👤 Admin API: http://localhost:${PORT}/api/admin`);
+console.log(`📝 Blog API: http://localhost:${PORT}/api/blogs`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);

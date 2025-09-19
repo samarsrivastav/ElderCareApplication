@@ -40,12 +40,12 @@ class EmailService {
     const mailOptions = {
       from: process.env['SMTP_FROM'],
       to: to,
-      subject: 'Thank you for contacting ElderCare - We\'ll be in touch soon!',
+      subject: 'Thank you for contacting AGEVAA - We\'ll be in touch soon!',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
-            <h1 style="margin: 0; font-size: 28px;">🏥 ElderCare</h1>
-            <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9;">Compassionate Care for Your Loved Ones</p>
+            <h1 style="margin: 0; font-size: 28px;">🏠 AGEVAA</h1>
+            <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9;">Senior Living Solutions</p>
           </div>
           
           <div style="background: #f8fafc; padding: 30px; border-radius: 0 0 10px 10px;">
@@ -111,7 +111,7 @@ class EmailService {
   }): Promise<void> {
     const mailOptions = {
       from: process.env['SMTP_FROM'],
-      to: 'admin@eldercare.com', // Admin email
+      to: process.env['ADMIN_EMAIL'] || 'admin@agevaa.com', // Admin email
       subject: `New Contact Form Submission: ${contactData.subject}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -184,14 +184,14 @@ class EmailService {
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
           <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
             <div style="text-align: center; margin-bottom: 30px;">
-              <h1 style="color: #2563eb; margin: 0; font-size: 28px;">🏠 ElderCare</h1>
+              <h1 style="color: #2563eb; margin: 0; font-size: 28px;">🏠 AGEVAA</h1>
               <h2 style="color: #16a34a; margin: 10px 0 0 0; font-size: 24px;">Payment Received!</h2>
             </div>
             
             <div style="background-color: #f0f9ff; padding: 20px; border-radius: 8px; border-left: 4px solid #2563eb; margin-bottom: 25px;">
               <h3 style="color: #1e40af; margin: 0 0 15px 0;">Dear ${customerName},</h3>
               <p style="color: #374151; margin: 0; line-height: 1.6;">
-                Thank you for choosing ElderCare! We have received your payment details and are processing your ${paymentType === 'buy' ? 'purchase' : 'rental'} request.
+                Thank you for choosing AGEVAA! We have received your payment details and are processing your ${paymentType === 'buy' ? 'purchase' : 'rental'} request.
               </p>
             </div>
 
@@ -282,7 +282,7 @@ class EmailService {
 
     const mailOptions = {
       from: process.env['SMTP_FROM'],
-      to: 'admin@eldercare.com', // Admin email
+      to: process.env['ADMIN_EMAIL'] || 'admin@agevaa.com', // Admin email
       subject: `New Payment Submission - ${roomName}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
