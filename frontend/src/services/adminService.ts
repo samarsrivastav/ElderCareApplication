@@ -110,6 +110,30 @@ class AdminService {
   }
 
   /**
+   * Get purchase enquiries (from payments endpoint if still active)
+   */
+  async getEnquiries(page: number = 1, limit: number = 10): Promise<AdminResponse> {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/payments?page=${page}&limit=${limit}`,
+        {
+          method: 'GET',
+          headers: this.getHeaders(),
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to fetch enquiries');
+      }
+      return data;
+    } catch (error) {
+      console.error('Error fetching enquiries:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Get contact by ID
    * @param id - Contact ID
    * @returns Promise with contact

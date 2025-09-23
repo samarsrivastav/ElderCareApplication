@@ -69,6 +69,8 @@ const AdminPage: React.FC = () => {
   const [contactLoading] = useState(false);
   const [contactModalVisible, setContactModalVisible] = useState(false);
   const [selectedContact, setSelectedContact] = useState<any>(null);
+  const [enquiries, setEnquiries] = useState<any[]>([]);
+  const [enquiryLoading] = useState(false);
   
   // Stats states
   const [stats, setStats] = useState<any>(null);
@@ -107,10 +109,11 @@ const AdminPage: React.FC = () => {
   const fetchDashboardData = async (): Promise<void> => {
     try {
       setLoading(true);
-      const [statsResponse, blogsResponse, contactsResponse] = await Promise.all([
+      const [statsResponse, blogsResponse, contactsResponse, enquiriesResponse] = await Promise.all([
         adminService.getDashboardStats(),
         blogService.getAdminBlogs(1, 10),
-        adminService.getContacts(1, 5)
+        adminService.getContacts(1, 5),
+        adminService.getEnquiries(1, 10)
       ]);
 
       if (statsResponse.success) {
@@ -121,6 +124,9 @@ const AdminPage: React.FC = () => {
       }
       if (contactsResponse.success && contactsResponse.data.contacts) {
         setContacts(contactsResponse.data.contacts);
+      }
+      if (enquiriesResponse.success && enquiriesResponse.data?.payments) {
+        setEnquiries(enquiriesResponse.data.payments);
       }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -319,6 +325,14 @@ const AdminPage: React.FC = () => {
       render: (date: string) => new Date(date).toLocaleDateString(),
     },
   ];
+  const enquiryColumns = [
+    { title: 'Customer', dataIndex: 'customerName', key: 'customerName' },
+    { title: 'Email', dataIndex: 'customerEmail', key: 'customerEmail' },
+    { title: 'Room', dataIndex: 'roomName', key: 'roomName' },
+    { title: 'Type', dataIndex: 'paymentType', key: 'paymentType', render: (t: string) => t?.charAt(0).toUpperCase() + t?.slice(1) },
+    { title: 'Amount', dataIndex: 'amount', key: 'amount' },
+    { title: 'Date', dataIndex: 'createdAt', key: 'createdAt', render: (d: string) => new Date(d).toLocaleDateString() },
+  ];
 
   if (loading) {
     return (
@@ -455,6 +469,19 @@ const AdminPage: React.FC = () => {
                   dataSource={contacts}
                   rowKey="_id"
                   loading={contactLoading}
+                  pagination={false}
+                />
+              )
+            },
+            {
+              key: 'enquiries',
+              label: 'Purchase Enquiries',
+              children: (
+                <Table
+                  columns={enquiryColumns}
+                  dataSource={enquiries}
+                  rowKey="_id"
+                  loading={enquiryLoading}
                   pagination={false}
                 />
               )

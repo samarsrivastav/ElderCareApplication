@@ -3,8 +3,6 @@ import {
   HeroSection,
   StatisticsSection,
   ValuesSection,
-  TeamSection,
-  AchievementsSection,
   MissionSection
 } from '../components/about';
 
@@ -18,8 +16,6 @@ const AboutPage: React.FC = () => {
       <HeroSection />
       <StatisticsSection />
       <ValuesSection />
-      <TeamSection />
-      <AchievementsSection />
       <MissionSection />
     </div>
   );

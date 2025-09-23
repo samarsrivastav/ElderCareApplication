@@ -6,11 +6,9 @@ import {
   formatPrice, 
   getRoomTypeColor, 
   getCareLevelColor, 
-  prepareChartData,
   createComparisonColumns,
   createComparisonTableData
 } from '../../utils/compare';
-import ComparisonChart from '../ComparisonChart';
 import RatingIndicator from '../RatingIndicator';
 
 const { Title, Text } = Typography;
@@ -52,7 +50,7 @@ const ComparisonResults: React.FC<ComparisonResultsProps> = ({
             <div className="max-h-32 overflow-y-auto">
               {value.map((item, index) => (
                 <span 
-                  key={index}
+                  key={`${item}-${index}`}
                   className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mr-1 mb-1"
                 >
                   {item}
@@ -193,10 +191,6 @@ const ComparisonResults: React.FC<ComparisonResultsProps> = ({
             ))}
           </Row>
 
-          {/* Comparison Chart */}
-          {rooms.length >= 2 && (
-            <ComparisonChart data={prepareChartData(rooms)} />
-          )}
 
           {/* Detailed Comparison Table */}
           <Card title="Detailed Comparison" className="shadow-sm">
@@ -222,16 +216,16 @@ const ComparisonResults: React.FC<ComparisonResultsProps> = ({
                   </div>
                 </Col>
                 <Col xs={24} sm={8}>
-                  <div className="text-center p-4 bg-green-50 rounded-lg">
-                    <div className="text-2xl font-bold text-green-600">
+                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                    <div className="text-2xl font-bold text-blue-600">
                       {comparisonSummary.priceRange.average.toLocaleString()}
                     </div>
                     <div className="text-sm text-gray-600">Avg Price (₹)</div>
                   </div>
                 </Col>
                 <Col xs={24} sm={8}>
-                  <div className="text-center p-4 bg-orange-50 rounded-lg">
-                    <div className="text-2xl font-bold text-orange-600">
+                  <div className="text-center p-4 bg-cyan-50 rounded-lg">
+                    <div className="text-2xl font-bold text-cyan-600">
                       {comparisonSummary.priceRange.max.toLocaleString()}
                     </div>
                     <div className="text-sm text-gray-600">Max Price (₹)</div>

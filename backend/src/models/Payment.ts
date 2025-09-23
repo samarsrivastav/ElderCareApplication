@@ -12,7 +12,7 @@ export interface IPayment extends Document {
   customerName: string;
   customerPhone: string;
   customerEmail: string;
-  transactionId: string;
+  transactionId?: string;
   status: 'pending' | 'verified' | 'rejected';
   createdAt: Date;
   updatedAt: Date;
@@ -65,8 +65,9 @@ const PaymentSchema: Schema = new Schema(
     },
     transactionId: {
       type: String,
-      required: true,
-      unique: true,
+      required: false,
+      unique: false,
+      sparse: true,
       trim: true,
     },
     status: {

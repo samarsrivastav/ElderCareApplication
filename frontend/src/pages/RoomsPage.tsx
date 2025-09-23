@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Row, Col, Pagination, Spin, Alert, Button, Space, Typography, Drawer } from 'antd';
 import { FilterOutlined, ReloadOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
 import RoomFilters from '../components/RoomFilters';
 import RoomCard from '../components/RoomCard';
 import { roomService } from '../services/roomService';
+import { ROOM_TYPES, PAGINATION_DEFAULTS } from '../constants';
 import { Room, RoomFilters as RoomFiltersType, RoomListResponse } from '../types/room';
-import { PAGINATION_DEFAULTS } from '../constants';
 
 const { Title, Text } = Typography;
 
@@ -17,6 +17,7 @@ const { Title, Text } = Typography;
  */
 const RoomsPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -65,6 +66,59 @@ const RoomsPage: React.FC = () => {
       setLoading(false);
     }
   }, [pagination.page, pagination.limit, filters, searchQuery]);
+
+  // Handle navigation state from homepage (city/service/tag search)
+  useEffect(() => {
+    const state: any = location.state;
+    if (!state) return;
+
+    const nextFilters: RoomFiltersType = { ...filters };
+
+    if (state.searchType === 'service' && typeof state.searchQuery === 'string') {
+      // Map service names to roomType constants when possible
+      const name = state.searchQuery.toLowerCase();
+      const map: Record<string, string> = {
+        'assisted living facilities': ROOM_TYPES.ASSISTED_LIVING,
+        'assisted living': ROOM_TYPES.ASSISTED_LIVING,
+        'memory care homes': ROOM_TYPES.MEMORY_CARE,
+        'memory care': ROOM_TYPES.MEMORY_CARE,
+        'elder daycare': ROOM_TYPES.DAYCARE,
+        'daycare': ROOM_TYPES.DAYCARE,
+        'independent living': ROOM_TYPES.INDEPENDENT_LIVING,
+      };
+      const mapped = map[name];
+      if (mapped) {
+        nextFilters.roomType = mapped as RoomFiltersType['roomType'];
+        setFilters(nextFilters);
+        setSearchQuery('');
+      } else {
+        setSearchQuery(state.searchQuery);
+      }
+      setPagination(prev => ({ ...prev, page: 1 }));
+      return;
+    }
+
+    if (state.searchType === 'city' && typeof state.searchQuery === 'string') {
+      // Try to set city filter if supported in our filters; otherwise, search text
+      const supportedCities = ['Gurugram', 'Delhi', 'Mumbai', 'Bangalore'];
+      const match = supportedCities.find(c => c.toLowerCase() === String(state.searchQuery).toLowerCase());
+      if (match) {
+        nextFilters.city = match;
+        setFilters(nextFilters);
+        setSearchQuery('');
+      } else {
+        setSearchQuery(state.searchQuery);
+      }
+      setPagination(prev => ({ ...prev, page: 1 }));
+      return;
+    }
+
+    if (state.searchQuery) {
+      setSearchQuery(state.searchQuery);
+      setPagination(prev => ({ ...prev, page: 1 }));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state]);
 
   useEffect(() => {
     fetchRooms();
@@ -182,7 +236,6 @@ const RoomsPage: React.FC = () => {
               pageSize={pagination.limit}
               onChange={handlePageChange}
               showSizeChanger={false}
-              showQuickJumper
               showTotal={(total, range) =>
                 `${range[0]}-${range[1]} of ${total} rooms`
               }

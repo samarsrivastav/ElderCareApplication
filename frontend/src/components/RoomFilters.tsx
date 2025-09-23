@@ -30,6 +30,7 @@ const RoomFilters: React.FC<RoomFiltersProps> = ({
   };
 
   const roomTypeOptions = [
+    { label: 'All Room Types', value: undefined as unknown as string },
     { label: 'Assisted Living', value: ROOM_TYPES.ASSISTED_LIVING },
     { label: 'Independent Living', value: ROOM_TYPES.INDEPENDENT_LIVING },
     { label: 'Memory Care', value: ROOM_TYPES.MEMORY_CARE },
@@ -67,7 +68,7 @@ const RoomFilters: React.FC<RoomFiltersProps> = ({
               id="room-type-select"
               placeholder="Select room type"
               value={filters.roomType}
-              onChange={(value) => handleFilterChange('roomType', value)}
+              onChange={(value) => handleFilterChange('roomType', value || undefined)}
               options={roomTypeOptions}
               className="w-full"
               allowClear
@@ -88,10 +89,18 @@ const RoomFilters: React.FC<RoomFiltersProps> = ({
               allowClear
               size="middle"
             >
-              <Select.Option value="Gurugram">Gurugram</Select.Option>
-              <Select.Option value="Delhi">Delhi</Select.Option>
               <Select.Option value="Mumbai">Mumbai</Select.Option>
+              <Select.Option value="Delhi">Delhi</Select.Option>
+              <Select.Option value="Delhi NCR">Delhi NCR</Select.Option>
+              <Select.Option value="Gurugram">Gurugram</Select.Option>
               <Select.Option value="Bangalore">Bangalore</Select.Option>
+              <Select.Option value="Pune">Pune</Select.Option>
+              <Select.Option value="Chennai">Chennai</Select.Option>
+              <Select.Option value="Kolkata">Kolkata</Select.Option>
+              <Select.Option value="Hyderabad">Hyderabad</Select.Option>
+              <Select.Option value="Ahmedabad">Ahmedabad</Select.Option>
+              <Select.Option value="Coimbatore">Coimbatore</Select.Option>
+              <Select.Option value="Kerala">Kerala</Select.Option>
             </Select>
           </div>
           

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Layout, Button, Drawer } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
+import SearchBar from './SearchBar';
 
 const { Header } = Layout;
 
@@ -17,6 +18,12 @@ const Navbar: React.FC = () => {
   const handleMenuClick = (key: string) => {
     navigate(key);
     setMobileMenuOpen(false);
+  };
+
+  const handleSearch = (query: string) => {
+    if (query.trim()) {
+      navigate('/rooms', { state: { searchQuery: query } });
+    }
   };
 
   const publicMenuItems = [
@@ -80,11 +87,14 @@ const Navbar: React.FC = () => {
             ))}
           </div>
 
-          {/* Contact Info - Hidden on small screens */}
-          <div className="hidden lg:flex items-center space-x-4">
-            <span className="text-gray-600 text-sm">
-              Senior Living Solutions
-            </span>
+          {/* Search Bar - Hidden on small screens */}
+          <div className="hidden lg:flex items-center w-80">
+            <SearchBar
+              onSearch={handleSearch}
+              placeholder="Search rooms..."
+              className="w-full"
+              showSearchButton={true}
+            />
           </div>
 
           {/* Mobile Menu Button */}

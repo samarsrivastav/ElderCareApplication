@@ -14,25 +14,25 @@ export const getStatisticsData = () => [
 export const getValuesData = () => [
   {
     icon: 'HeartOutlined',
-    iconColor: 'text-red-500',
+    iconColor: 'text-blue-500',
     title: 'Compassionate Care',
     description: 'We provide empathetic and personalized care that respects the dignity and individuality of each resident.'
   },
   {
     icon: 'TeamOutlined',
-    iconColor: 'text-blue-500',
+    iconColor: 'text-blue-600',
     title: 'Expert Team',
     description: 'Our qualified caregivers and healthcare professionals are dedicated to providing the highest quality care.'
   },
   {
     icon: 'SafetyOutlined',
-    iconColor: 'text-green-500',
+    iconColor: 'text-blue-700',
     title: 'Safe & Secure',
     description: 'Advanced monitoring and safety protocols ensure peace of mind for families and residents.'
   },
   {
     icon: 'ClockCircleOutlined',
-    iconColor: 'text-purple-500',
+    iconColor: 'text-blue-800',
     title: '24/7 Support',
     description: 'Round-the-clock care and support whenever you need it, ensuring continuous peace of mind.'
   }

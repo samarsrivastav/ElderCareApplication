@@ -1,37 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import {
-  Card,
-  Form,
-  Input,
-  Button,
-  Typography,
-  Space,
-  Alert,
-  Image,
-  Spin,
-  message,
-  Row,
-  Col,
-} from 'antd';
-import {
-  ArrowLeftOutlined,
-  CopyOutlined,
-} from '@ant-design/icons';
+import { Card, Form, Input, Button, Typography, Alert, Spin, message, Row, Col } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import { roomService } from '../services/roomService';
-import { paymentService } from '../services/paymentService';
 import { Room } from '../types/room';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text } = Typography;
 
 /**
  * Payment form data interface
  */
-interface PaymentFormData {
+interface EnquiryFormData {
   name: string;
   phone: string;
   email: string;
-  transactionId: string;
+  message?: string;
 }
 
 /**
@@ -50,10 +33,6 @@ const PaymentPage: React.FC = () => {
   const roomId = searchParams.get('roomId');
   const paymentType = searchParams.get('type'); // 'buy' or 'rent'
   const amount = searchParams.get('amount');
-
-  // UPI ID for payments
-  const UPI_ID = 'agevaa@paytm';
-  const UPI_QR_CODE = '/upi-qr-code.svg';
 
   useEffect(() => {
     if (roomId) {
@@ -87,35 +66,37 @@ const PaymentPage: React.FC = () => {
   /**
    * Handle form submission
    */
-  const handleSubmit = async (values: PaymentFormData): Promise<void> => {
+  const handleSubmit = async (values: EnquiryFormData): Promise<void> => {
     try {
       setSubmitting(true);
       
-      const paymentData = {
-        roomId: roomId!,
-        roomName: room?.name || '',
-        paymentType: paymentType! as 'buy' | 'rent',
-        amount: parseFloat(amount!),
-        currency: room?.pricing?.currency || 'INR',
-        customerName: values.name,
-        customerPhone: values.phone,
-        customerEmail: values.email,
-        transactionId: values.transactionId,
-      };
+      // Store as enquiry in Payments collection via payment endpoint (no transactionId)
+      const res = await fetch((import.meta.env.VITE_API_URL || 'http://localhost:5001/api') + '/payments/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          roomId: roomId!,
+          roomName: room?.name || '',
+          paymentType: paymentType! as 'buy' | 'rent',
+          amount: parseFloat(amount!),
+          currency: room?.pricing?.currency || 'INR',
+          customerName: values.name,
+          customerPhone: values.phone,
+          customerEmail: values.email,
+        }),
+      });
+      const result = await res.json();
 
-      // Submit to backend
-      const result = await paymentService.submitPayment(paymentData);
-      
       if (result.success) {
-        message.success(result.message || 'Payment details submitted successfully! We will contact you shortly.');
+        message.success('Enquiry submitted successfully! We will contact you shortly.');
         navigate('/rooms');
       } else {
-        throw new Error(result.message || 'Failed to submit payment details');
+        throw new Error(result.message || 'Failed to submit enquiry');
       }
       
     } catch (error) {
-      console.error('Error submitting payment:', error);
-      message.error('Failed to submit payment details. Please try again.');
+      console.error('Error submitting enquiry:', error);
+      message.error('Failed to submit enquiry. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -124,10 +105,7 @@ const PaymentPage: React.FC = () => {
   /**
    * Copy UPI ID to clipboard
    */
-  const copyUpiId = (): void => {
-    navigator.clipboard.writeText(UPI_ID);
-    message.success('UPI ID copied to clipboard!');
-  };
+  // No copy needed for enquiry mode
 
   /**
    * Format price with currency
@@ -155,8 +133,8 @@ const PaymentPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Alert
-          message="Invalid Payment Request"
-          description="Missing required payment information."
+          message="Invalid Enquiry"
+          description="Missing required information."
           type="error"
           showIcon
         />
@@ -177,17 +155,17 @@ const PaymentPage: React.FC = () => {
             Back to Room Details
           </Button>
           <Title level={2} className="mb-2">
-            Complete Your {paymentType === 'buy' ? 'Purchase' : 'Rental'} Payment
+            {paymentType === 'buy' ? 'Buy' : 'Rent'} Enquiry
           </Title>
           <Text type="secondary">
-            Secure your booking for {room.name}
+            Share your contact details and we will reach out for {room.name}
           </Text>
         </div>
 
         <Row gutter={[24, 24]}>
-          {/* Payment Form */}
+          {/* Enquiry Form */}
           <Col xs={24} lg={14}>
-            <Card title="Payment Details" className="mb-6">
+            <Card title="Your Details" className="mb-6">
               <Form
                 form={form}
                 layout="vertical"
@@ -227,15 +205,8 @@ const PaymentPage: React.FC = () => {
                   <Input size="large" placeholder="Enter your email address" />
                 </Form.Item>
 
-                <Form.Item
-                  label="Transaction ID"
-                  name="transactionId"
-                  rules={[
-                    { required: true, message: 'Please enter the transaction ID' },
-                    { min: 6, message: 'Transaction ID must be at least 6 characters' },
-                  ]}
-                >
-                  <Input size="large" placeholder="Enter UPI transaction ID" />
+                <Form.Item label="Message (optional)" name="message">
+                  <Input.TextArea rows={4} placeholder="Tell us anything we should know" />
                 </Form.Item>
 
                 <Form.Item>
@@ -246,14 +217,14 @@ const PaymentPage: React.FC = () => {
                     loading={submitting}
                     className="w-full h-12 text-lg font-semibold"
                   >
-                    {submitting ? 'Processing...' : 'Submit Payment Details'}
+                    {submitting ? 'Submitting...' : 'Submit Enquiry'}
                   </Button>
                 </Form.Item>
               </Form>
             </Card>
           </Col>
 
-          {/* Payment Information */}
+          {/* Room Summary */}
           <Col xs={24} lg={10}>
             {/* Order Summary */}
             <Card title="Order Summary" className="mb-6">
@@ -268,70 +239,12 @@ const PaymentPage: React.FC = () => {
                 </div>
                 <div className="flex justify-between items-center">
                   <Text strong>Amount:</Text>
-                  <Text strong className="text-lg text-green-600">
+                  <Text strong className="text-lg text-blue-600">
                     {formatPrice(parseFloat(amount), room.pricing?.currency || 'INR')}
                     {paymentType === 'rent' && '/month'}
                   </Text>
                 </div>
               </div>
-            </Card>
-
-            {/* UPI Payment Instructions */}
-            <Card title="Payment Instructions" className="mb-6">
-              <Space direction="vertical" size="middle" className="w-full">
-                <Alert
-                  message="Complete Payment First"
-                  description="Please complete the UPI payment before submitting this form."
-                  type="info"
-                  showIcon
-                />
-
-                <div>
-                  <Text strong>Step 1: Pay via UPI</Text>
-                  <div className="mt-2 p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <Text>UPI ID: </Text>
-                      <div className="flex items-center gap-2">
-                        <Text code className="text-sm">{UPI_ID}</Text>
-                        <Button
-                          size="small"
-                          icon={<CopyOutlined />}
-                          onClick={copyUpiId}
-                        >
-                          Copy
-                        </Button>
-                      </div>
-                    </div>
-                    <Text type="secondary" className="text-xs">
-                      Or scan the QR code below
-                    </Text>
-                  </div>
-                </div>
-
-                <div className="text-center">
-                  <Text strong>QR Code for Payment</Text>
-                  <div className="mt-2 p-4 bg-white rounded-lg border-2 border-dashed border-gray-300">
-                    <Image
-                      src={UPI_QR_CODE}
-                      alt="UPI QR Code"
-                      width={200}
-                      height={200}
-                      className="mx-auto"
-                      preview={false}
-                    />
-                    <Text type="secondary" className="text-xs mt-2 block">
-                      Scan with any UPI app to pay {formatPrice(parseFloat(amount), room.pricing?.currency || 'INR')}
-                    </Text>
-                  </div>
-                </div>
-
-                <div>
-                  <Text strong>Step 2: Submit Form</Text>
-                  <Paragraph type="secondary" className="text-sm mt-1">
-                    After completing the payment, enter your transaction ID in the form and submit.
-                  </Paragraph>
-                </div>
-              </Space>
             </Card>
           </Col>
         </Row>

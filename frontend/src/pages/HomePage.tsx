@@ -1,7 +1,14 @@
 import React from 'react';
-import { Button, Card, Row, Col, Typography, Space } from 'antd';
-import { HeartOutlined, TeamOutlined, SafetyOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { Button, Card, Typography, Space, Row, Col } from 'antd';
+import { 
+  HeartOutlined, 
+  TeamOutlined,
+  SafetyOutlined, 
+  ClockCircleOutlined
+} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import SearchBar from '../components/SearchBar';
+import { HOME_CITIES, SERVICE_MODELS } from '../constants/homeCards';
 
 const { Title, Paragraph } = Typography;
 
@@ -12,31 +19,49 @@ const { Title, Paragraph } = Typography;
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
 
+  const cities = HOME_CITIES;
+
+  const serviceModels = SERVICE_MODELS;
+
   const features = [
     {
-      icon: <HeartOutlined className="text-4xl text-red-500" />,
+      icon: <HeartOutlined className="text-4xl text-blue-500" />,
       title: 'Compassionate Care',
       description: 'Professional and empathetic care for your loved ones with personalized attention.'
     },
     {
-      icon: <TeamOutlined className="text-4xl text-blue-500" />,
+      icon: <TeamOutlined className="text-4xl text-blue-600" />,
       title: 'Expert Team',
       description: 'Qualified caregivers and healthcare professionals dedicated to quality care.'
     },
     {
-      icon: <SafetyOutlined className="text-4xl text-green-500" />,
+      icon: <SafetyOutlined className="text-4xl text-blue-700" />,
       title: 'Safe & Secure',
       description: 'Advanced monitoring and safety protocols to ensure peace of mind.'
     },
     {
-      icon: <ClockCircleOutlined className="text-4xl text-purple-500" />,
+      icon: <ClockCircleOutlined className="text-4xl text-blue-800" />,
       title: '24/7 Support',
       description: 'Round-the-clock care and support whenever you need it.'
     }
   ];
 
+  const handleSearch = (query: string) => {
+    if (query.trim()) {
+      navigate('/rooms', { state: { searchQuery: query } });
+    }
+  };
+
+  const handleCityClick = (city: string) => {
+    navigate('/rooms', { state: { searchQuery: city, searchType: 'city' } });
+  };
+
+  const handleServiceClick = (service: string) => {
+    navigate('/rooms', { state: { searchQuery: service, searchType: 'service' } });
+  };
+
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-50 to-indigo-100 py-12 sm:py-20 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto text-center">
@@ -64,10 +89,94 @@ const HomePage: React.FC = () => {
               Compare Rooms
             </Button>
           </Space>
+          
+          {/* Search Bar */}
+          <div className="mt-8 max-w-2xl mx-auto">
+            <SearchBar
+              onSearch={handleSearch}
+              placeholder="Search for rooms, facilities, or locations..."
+              className="w-full"
+              showSearchButton={true}
+            />
+          </div>
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* City Cards Section */}
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <Title level={2} className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Find retirement homes by City
+            </Title>
+          </div>
+          
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {cities.map((city) => (
+              <Card 
+                key={city.name}
+                className="text-center border-0 transition-all duration-300 cursor-pointer hover:scale-105 overflow-hidden"
+                styles={{ body: { padding: 0 } }}
+                onClick={() => handleCityClick(city.name)}
+              >
+                <div className="w-full h-24">
+                  <img 
+                    src={city.image}
+                    alt={city.name}
+                    className="w-full h-full object-contain p-2"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '/image-not-found.svg';
+                    }}
+                  />
+                </div>
+                <div className="px-2 py-2">
+                  <span className="block text-gray-800 font-semibold text-sm sm:text-base truncate">{city.name}</span>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Service Model Cards Section */}
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <Title level={2} className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Find retirement homes by Service Model
+            </Title>
+          </div>
+          
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {serviceModels.map((service) => (
+              <Card 
+                key={service.name}
+                className="text-center border-0 transition-all duration-300 cursor-pointer hover:scale-105 overflow-hidden"
+                styles={{ body: { padding: 0 } }}
+                onClick={() => handleServiceClick(service.name)}
+              >
+                <div className="w-full h-24">
+                  <img 
+                    src={service.image}
+                    alt={service.name}
+                    className="w-full h-full object-contain p-2"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '/image-not-found.svg';
+                    }}
+                  />
+                </div>
+                <div className="px-2 py-2">
+                  <span className="block text-gray-800 font-semibold text-xs sm:text-sm md:text-base truncate">{service.name}</span>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose AGEVAA Section */}
       <section className="py-12 sm:py-20 px-4 sm:px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
@@ -102,25 +211,6 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-blue-600 py-12 sm:py-20 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <Title level={2} className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6" style={{ color: 'white' }}>
-            Ready to Get Started?
-          </Title>
-          <Paragraph className="text-lg sm:text-xl text-blue-100 mb-6 sm:mb-8">
-            Join thousands of families who trust AGEVAA for their loved ones' well-being.
-          </Paragraph>
-          <Button 
-            type="primary" 
-            size="large" 
-            onClick={() => navigate('/rooms')}
-            className="bg-white text-blue-600 hover:bg-gray-50 h-12 px-8 text-lg font-semibold w-full sm:w-auto"
-          >
-            Browse Rooms
-          </Button>
-        </div>
-      </section>
     </div>
   );
 };

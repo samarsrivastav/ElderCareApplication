@@ -36,14 +36,19 @@ const ComparePage: React.FC = () => {
     const roomIds = location.state?.roomIds || [];
     if (roomIds.length > 0) {
       setSelectedRooms(roomIds);
-      fetchComparisonData(roomIds);
+      if (roomIds.length >= 2) {
+        fetchComparisonData(roomIds);
+      } else {
+        // Single room preselected → show selection UI with one side filled
+        setLoading(false);
+      }
     } else {
       setLoading(false);
     }
-    fetchAllRooms();
+    fetchAllRooms(roomIds);
   }, [location.state]);
 
-  const fetchAllRooms = async () => {
+  const fetchAllRooms = async (preselectedIds: string[] = []) => {
     try {
       setLoadingRooms(true);
       const response: RoomListResponse = await roomService.getAllRooms({ limit: 50 });
@@ -52,6 +57,14 @@ const ComparePage: React.FC = () => {
         const searchOptions = createSearchOptions(response.data.rooms);
         setSearchOptionsA(searchOptions);
         setSearchOptionsB(searchOptions);
+        // If a single room was passed from the details page, prefill Room A
+        if (preselectedIds.length === 1) {
+          const match = response.data.rooms.find(r => r.id === preselectedIds[0]);
+          if (match) {
+            setRoomA(match);
+            setSearchA(match.name);
+          }
+        }
       }
     } catch (err) {
       console.error('Error fetching rooms:', err);

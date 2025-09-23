@@ -19,6 +19,7 @@ import {
 } from 'antd';
 import ImageWithFallback from '../components/ImageWithFallback';
 import ImageCollage from '../components/ImageCollage';
+import RatingIndicator from '../components/RatingIndicator';
 import {
   ArrowLeftOutlined,
   EnvironmentOutlined,
@@ -30,8 +31,6 @@ import {
 import { roomService } from '../services/roomService';
 import { Room, RoomDetailsResponse } from '../types/room';
 import { CURRENCY_SYMBOLS } from '../constants';
-import RatingIndicator from '../components/RatingIndicator';
-import RatingPieChart from '../components/RatingPieChart';
 
 const { Title, Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
@@ -181,7 +180,7 @@ const RoomDetailPage: React.FC = () => {
                       disabled
                       value={room.overallRating}
                       style={{ fontSize: 20 }}
-                      className="text-yellow-400"
+                      className="text-blue-400"
                     />
                     <Text className="text-lg font-semibold">
                       {room.overallRating.toFixed(1)}/10
@@ -237,7 +236,7 @@ const RoomDetailPage: React.FC = () => {
                         </Col>
                         <Col xs={24} sm={12}>
                           <Card size="small" className="text-center">
-                            <div className="text-2xl font-bold text-green-600">
+                            <div className="text-2xl font-bold text-blue-600">
                               {formatPrice(room.pricing.securityDeposit, room.pricing.currency)}
                             </div>
                             <div className="text-sm text-gray-500">Security Deposit</div>
@@ -246,7 +245,7 @@ const RoomDetailPage: React.FC = () => {
                         {room.pricing.admissionCharge && (
                           <Col xs={24} sm={12}>
                             <Card size="small" className="text-center">
-                              <div className="text-2xl font-bold text-orange-600">
+                              <div className="text-2xl font-bold text-cyan-600">
                                 {formatPrice(room.pricing.admissionCharge, room.pricing.currency)}
                               </div>
                               <div className="text-sm text-gray-500">Admission Charge</div>
@@ -255,7 +254,7 @@ const RoomDetailPage: React.FC = () => {
                         )}
                         <Col xs={24} sm={12}>
                           <Card size="small" className="text-center">
-                            <div className="text-2xl font-bold text-purple-600">
+                            <div className="text-2xl font-bold text-blue-700">
                               {formatPrice(room.totalCost, room.pricing.currency)}
                             </div>
                             <div className="text-sm text-gray-500">Total Cost</div>
@@ -376,46 +375,18 @@ const RoomDetailPage: React.FC = () => {
                     disabled
                     value={room.overallRating}
                     style={{ fontSize: 24 }}
-                    className="text-yellow-400"
+                    className="text-blue-400"
                   />
                   <Text className="block text-gray-500 mt-2">out of 10</Text>
                 </div>
-              </Card>
-
-              <RatingPieChart ratings={{
-                lifestyle: room.lifestyle.rating,
-                medical: room.medical.rating,
-                services: room.services.rating,
-                community: room.community.rating,
-              }} />
-
-              <Card className="shadow-sm">
-                <Title level={4} className="mb-4">
-                  Detailed Ratings
-                </Title>
-                <div className="space-y-4">
-                  <RatingIndicator
-                    rating={room.lifestyle.rating}
-                    label="Lifestyle"
-                    showStars
-                  />
-                  <RatingIndicator
-                    rating={room.medical.rating}
-                    label="Medical Care"
-                    showStars
-                  />
-                  <RatingIndicator
-                    rating={room.services.rating}
-                    label="Services"
-                    showStars
-                  />
-                  <RatingIndicator
-                    rating={room.community.rating}
-                    label="Community"
-                    showStars
-                  />
+                <div className="space-y-2">
+                  <RatingIndicator rating={room.lifestyle.rating} label="Lifestyle" size="small" />
+                  <RatingIndicator rating={room.medical.rating} label="Medical" size="small" />
+                  <RatingIndicator rating={room.services.rating} label="Services" size="small" />
+                  <RatingIndicator rating={room.community.rating} label="Community" size="small" />
                 </div>
               </Card>
+
 
               <Card className="shadow-sm">
                 <Space direction="vertical" className="w-full">
@@ -439,12 +410,12 @@ const RoomDetailPage: React.FC = () => {
                 </Space>
 
                 {/* Payment Buttons */}
-                {room.totalCost && room.pricing.rent && (
+                {Boolean(room.totalCost && room.pricing.rent) && (
                   <div className="mt-6 space-y-3">
                     <Button
                       type="primary"
                       size="large"
-                      className="w-full h-14 text-lg font-semibold bg-green-600 hover:bg-green-700 border-green-600"
+                      className="w-full h-14 text-lg font-semibold bg-blue-600 hover:bg-blue-700 border-blue-600"
                       onClick={() => navigate(`/payment?roomId=${room.id}&type=buy&amount=${room.totalCost}`)}
                     >
                       🏠 Buy Now - {formatPrice(room.totalCost, room.pricing.currency)}

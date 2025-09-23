@@ -3,13 +3,12 @@ import { Card, Row, Col, Typography, Form, Input, Button } from 'antd';
 import { 
   PhoneOutlined, 
   MailOutlined, 
-  EnvironmentOutlined,
   SendOutlined,
   UserOutlined
 } from '@ant-design/icons';
-import { getFacilityLocationsData, handleContactFormSubmit } from '../../utils/contact';
+import { handleContactFormSubmit } from '../../utils/contact';
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Paragraph } = Typography;
 const { TextArea } = Input;
 
 /**
@@ -19,7 +18,6 @@ const { TextArea } = Input;
 const ContactFormSection: React.FC = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const locations = getFacilityLocationsData();
 
   const handleSubmit = async (values: any) => {
     setLoading(true);
@@ -27,7 +25,7 @@ const ContactFormSection: React.FC = () => {
       await handleContactFormSubmit(values);
       form.resetFields();
     } catch (error) {
-      // Error is already handled in the utility function
+      console.error('Error submitting contact form:', error);
     } finally {
       setLoading(false);
     }
@@ -36,7 +34,7 @@ const ContactFormSection: React.FC = () => {
   return (
     <section className="py-16 px-6 bg-gray-50">
       <div className="max-w-7xl mx-auto">
-        <Row gutter={[48, 48]}>
+        <Row gutter={[48, 48]} justify="center">
           <Col xs={24} lg={12}>
             <Card className="shadow-lg">
               <div className="mb-6">
@@ -151,52 +149,6 @@ const ContactFormSection: React.FC = () => {
             </Card>
           </Col>
 
-          <Col xs={24} lg={12}>
-            <Card className="shadow-lg">
-              <div className="mb-6">
-                <Title level={2} className="text-2xl font-bold text-gray-800 mb-2">
-                  Visit Our Facilities
-                </Title>
-                <Paragraph className="text-gray-600">
-                  We have multiple locations to serve you better. 
-                  Find the one closest to you and schedule a visit.
-                </Paragraph>
-              </div>
-
-              <div className="space-y-6">
-                {locations.map((location, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                    <Title level={4} className="text-lg font-semibold text-gray-800 mb-2">
-                      {location.name}
-                    </Title>
-                    <div className="space-y-2">
-                      <div className="flex items-center text-gray-600">
-                        <EnvironmentOutlined className="mr-2 text-primary-600" />
-                        <span>{location.address}</span>
-                      </div>
-                      <div className="flex items-center text-gray-600">
-                        <PhoneOutlined className="mr-2 text-primary-600" />
-                        <span>{location.phone}</span>
-                      </div>
-                      <div className="mt-3">
-                        <Text className="text-sm text-gray-500">Services:</Text>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {location.services.map((service, idx) => (
-                            <span 
-                              key={idx}
-                              className="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded-full"
-                            >
-                              {service}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </Col>
         </Row>
       </div>
     </section>

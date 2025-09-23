@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Input, Button } from 'antd';
 import { SearchOutlined, ClearOutlined } from '@ant-design/icons';
-import { SEARCH_DEBOUNCE_DELAY } from '../constants';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
   placeholder?: string;
   className?: string;
+  showSearchButton?: boolean;
 }
 
 /**
@@ -18,42 +18,80 @@ const SearchBar: React.FC<SearchBarProps> = ({
   onSearch,
   placeholder = 'Search rooms, facilities, or locations...',
   className = '',
+  showSearchButton = false,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onSearch(searchQuery);
-    }, SEARCH_DEBOUNCE_DELAY);
-
-    return () => clearTimeout(timer);
-  }, [searchQuery, onSearch]);
+  const handleSearch = () => {
+    onSearch(searchQuery);
+  };
 
   const handleClear = () => {
     setSearchQuery('');
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <div className={`relative ${className}`}>
-      <Input
-        size="large"
-        placeholder={placeholder}
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        prefix={<SearchOutlined className="text-primary-500" />}
-        suffix={
-          searchQuery && (
-            <Button
-              type="text"
-              icon={<ClearOutlined />}
-              onClick={handleClear}
-              className="text-gray-400 hover:text-gray-600"
-            />
-          )
-        }
-        className="w-full"
-        allowClear={false}
-      />
+      {showSearchButton ? (
+        <div className="flex gap-2">
+          <Input
+            size="large"
+            placeholder={placeholder}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            prefix={<SearchOutlined className="text-primary-500" />}
+            suffix={
+              searchQuery && (
+                <Button
+                  type="text"
+                  icon={<ClearOutlined />}
+                  onClick={handleClear}
+                  className="text-gray-400 hover:text-gray-600"
+                />
+              )
+            }
+            className="flex-1"
+            allowClear={false}
+          />
+          <Button
+            type="primary"
+            size="large"
+            icon={<SearchOutlined />}
+            onClick={handleSearch}
+            disabled={!searchQuery.trim()}
+          >
+            Search
+          </Button>
+        </div>
+      ) : (
+        <Input
+          size="large"
+          placeholder={placeholder}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
+          prefix={<SearchOutlined className="text-primary-500" />}
+          suffix={
+            searchQuery && (
+              <Button
+                type="text"
+                icon={<ClearOutlined />}
+                onClick={handleClear}
+                className="text-gray-400 hover:text-gray-600"
+              />
+            )
+          }
+          className="w-full"
+          allowClear={false}
+        />
+      )}
     </div>
   );
 };

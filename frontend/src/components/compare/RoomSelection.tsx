@@ -122,11 +122,11 @@ const RoomSelection: React.FC<RoomSelectionProps> = ({
                   />
                 </AutoComplete>
                 {roomB && (
-                  <Card size="small" className="bg-green-50 border-green-200">
+                  <Card size="small" className="bg-blue-50 border-blue-200">
                     <div className="flex items-center justify-between">
                       <div>
-                        <Text className="font-semibold text-green-800">{roomB.name}</Text>
-                        <div className="text-sm text-green-600">
+                        <Text className="font-semibold text-blue-800">{roomB.name}</Text>
+                        <div className="text-sm text-blue-600">
                           {roomB.facilityName} • {roomB.location.city}
                         </div>
                       </div>
@@ -227,7 +227,7 @@ const RoomSelection: React.FC<RoomSelectionProps> = ({
                       <Text className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
                         {room.roomType.replace('_', ' ')}
                       </Text>
-                      <Text className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                      <Text className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
                         {room.careLevel}
                       </Text>
                     </div>

@@ -38,18 +38,18 @@ const RoomCard: React.FC<RoomCardProps> = ({
   const getRoomTypeColor = (type: string) => {
     const colors = {
       assisted_living: "blue",
-      independent_living: "green",
-      memory_care: "orange",
-      daycare: "purple",
+      independent_living: "cyan",
+      memory_care: "geekblue",
+      daycare: "blue",
     };
     return colors[type as keyof typeof colors] || "default";
   };
 
   const getCareLevelColor = (level: string) => {
     const colors = {
-      high: "red",
-      medium: "orange",
-      low: "green",
+      high: "blue",
+      medium: "cyan",
+      low: "geekblue",
     };
     return colors[level as keyof typeof colors] || "default";
   };
@@ -88,7 +88,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
                 disabled
                 value={room.overallRating}
                 style={{ fontSize: 14 }}
-                className="text-yellow-400"
+                className="text-blue-400"
               />
               <span className="text-sm font-medium">
                 {room.overallRating.toFixed(1)}
@@ -107,7 +107,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
           }}
           className={`w-full h-12 m-0 mb-0 p-0 flex items-center justify-center cursor-pointer transition-colors duration-200 border-0 rounded-b-lg ${
             isInCompareList
-              ? "bg-green-50 hover:bg-green-100 text-green-600 hover:text-green-700"
+              ? "bg-blue-100 hover:bg-blue-200 text-blue-700 hover:text-blue-800"
               : "bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700"
           }`}
         >
@@ -156,8 +156,8 @@ const RoomCard: React.FC<RoomCardProps> = ({
                </div>
                <div className="text-xs text-gray-500">Monthly Rent</div>
              </div>
-             <div className="text-center p-3 bg-green-50 rounded-lg">
-               <div className="text-lg font-bold text-green-600">
+             <div className="text-center p-3 bg-blue-50 rounded-lg">
+               <div className="text-lg font-bold text-blue-600">
                  {formatPrice(room.totalCost, room.pricing.currency)}
                </div>
                <div className="text-xs text-gray-500">Total Cost</div>
@@ -175,7 +175,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
              <Tag color="blue" className="w-full text-center justify-center">
                {room.occupancy}
              </Tag>
-             <Tag color="purple" className="w-full text-center justify-center">
+             <Tag color="blue" className="w-full text-center justify-center">
                {room.lengthOfStay} term
              </Tag>
            </div>

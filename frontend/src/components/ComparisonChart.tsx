@@ -4,6 +4,27 @@ import { Card, Typography } from 'antd';
 
 const { Title } = Typography;
 
+/**
+ * Custom tooltip component for the comparison chart
+ * @param props - Tooltip props
+ * @returns JSX.Element
+ */
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload?.length) {
+    return (
+      <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
+        <p className="font-medium mb-2">{label}</p>
+        {payload.map((entry: any, index: number) => (
+          <p key={`${entry.name}-${index}`} className="text-sm" style={{ color: entry.color }}>
+            {entry.name}: <span className="font-semibold">{entry.value}/10</span>
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
 interface ComparisonChartProps {
   data: Array<{
     name: string;
@@ -25,21 +46,6 @@ const ComparisonChart: React.FC<ComparisonChartProps> = ({
   data,
   className = '',
 }) => {
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-medium mb-2">{label}</p>
-          {payload.map((entry: any, index: number) => (
-            <p key={index} className="text-sm" style={{ color: entry.color }}>
-              {entry.name}: <span className="font-semibold">{entry.value}/10</span>
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <Card className={`shadow-sm ${className}`}>
@@ -62,10 +68,10 @@ const ComparisonChart: React.FC<ComparisonChartProps> = ({
           <Tooltip content={<CustomTooltip />} />
           <Legend />
           <Bar dataKey="lifestyle" fill="#0ea5e9" name="Lifestyle" />
-          <Bar dataKey="medical" fill="#10b981" name="Medical" />
-          <Bar dataKey="services" fill="#f59e0b" name="Services" />
-          <Bar dataKey="community" fill="#8b5cf6" name="Community" />
-          <Bar dataKey="overall" fill="#ef4444" name="Overall" />
+          <Bar dataKey="medical" fill="#0284c7" name="Medical" />
+          <Bar dataKey="services" fill="#38bdf8" name="Services" />
+          <Bar dataKey="community" fill="#0369a1" name="Community" />
+          <Bar dataKey="overall" fill="#1e40af" name="Overall" />
         </BarChart>
       </ResponsiveContainer>
     </Card>

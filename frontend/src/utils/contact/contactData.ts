@@ -15,12 +15,6 @@ export const getContactInfoData = () => [
     description: 'We respond within 2 hours'
   },
   {
-    icon: 'EnvironmentOutlined',
-    title: 'Address',
-    details: ['123 Care Street', 'Health City, HC 12345'],
-    description: 'Visit us anytime'
-  },
-  {
     icon: 'ClockCircleOutlined',
     title: 'Hours',
     details: ['Mon-Fri: 8:00 AM - 6:00 PM', 'Sat-Sun: 9:00 AM - 4:00 PM'],

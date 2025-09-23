@@ -20,9 +20,9 @@ export const formatPrice = (amount: number, currency: string): string => {
 export const getRoomTypeColor = (type: string): string => {
   const colors = {
     assisted_living: 'blue',
-    independent_living: 'green',
-    memory_care: 'orange',
-    daycare: 'purple',
+    independent_living: 'cyan',
+    memory_care: 'geekblue',
+    daycare: 'blue',
   };
   return colors[type as keyof typeof colors] || 'default';
 };
@@ -34,9 +34,9 @@ export const getRoomTypeColor = (type: string): string => {
  */
 export const getCareLevelColor = (level: string): string => {
   const colors = {
-    high: 'red',
-    medium: 'orange',
-    low: 'green',
+    high: 'blue',
+    medium: 'cyan',
+    low: 'geekblue',
   };
   return colors[level as keyof typeof colors] || 'default';
 };

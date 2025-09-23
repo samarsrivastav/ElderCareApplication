@@ -26,10 +26,10 @@ class PaymentController {
       } = req.body;
 
       // Validate required fields
-      if (!roomId || !roomName || !paymentType || !amount || !customerName || !customerEmail || !transactionId) {
+      if (!roomId || !roomName || !paymentType || !amount || !customerName || !customerEmail) {
         res.status(400).json({
           success: false,
-          message: 'All required fields must be provided',
+          message: 'Missing required fields',
         });
         return;
       }
@@ -52,14 +52,16 @@ class PaymentController {
         return;
       }
 
-      // Check if transaction ID already exists
-      const existingPayment = await Payment.findOne({ transactionId });
-      if (existingPayment) {
-        res.status(409).json({
-          success: false,
-          message: 'Transaction ID already exists',
-        });
-        return;
+      // If transactionId present, ensure uniqueness
+      if (transactionId) {
+        const existingPayment = await Payment.findOne({ transactionId });
+        if (existingPayment) {
+          res.status(409).json({
+            success: false,
+            message: 'Transaction ID already exists',
+          });
+          return;
+        }
       }
 
       // Create new payment record
@@ -72,7 +74,7 @@ class PaymentController {
         customerName,
         customerPhone,
         customerEmail,
-        transactionId,
+        transactionId: transactionId || undefined,
       });
 
       await payment.save();
@@ -86,7 +88,7 @@ class PaymentController {
           paymentType,
           amount,
           currency: currency || 'USD',
-          transactionId,
+          transactionId: transactionId || 'N/A',
         });
       } catch (emailError) {
         console.error('Error sending payment confirmation email:', emailError);
@@ -103,7 +105,7 @@ class PaymentController {
           paymentType,
           amount,
           currency: currency || 'USD',
-          transactionId,
+          transactionId: transactionId || 'N/A',
         });
       } catch (emailError) {
         console.error('Error sending payment notification email:', emailError);

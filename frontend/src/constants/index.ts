@@ -44,7 +44,7 @@ export const CURRENCY_SYMBOLS = {
 
 export const PAGINATION_DEFAULTS = {
   PAGE: 1,
-  LIMIT: 12,
+  LIMIT: 3,
 } as const;
 
 export const SEARCH_DEBOUNCE_DELAY = 300;
