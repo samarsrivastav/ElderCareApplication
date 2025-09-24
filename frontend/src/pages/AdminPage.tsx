@@ -40,7 +40,7 @@ import { Blog, CreateBlogData, Admin } from '../types/blog';
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
-const { TabPane } = Tabs;
+// const { TabPane } = Tabs; // Unused
 const { TextArea } = Input;
 
 /**
@@ -125,8 +125,8 @@ const AdminPage: React.FC = () => {
       if (contactsResponse.success && contactsResponse.data.contacts) {
         setContacts(contactsResponse.data.contacts);
       }
-      if (enquiriesResponse.success && enquiriesResponse.data?.payments) {
-        setEnquiries(enquiriesResponse.data.payments);
+      if (enquiriesResponse.success && (enquiriesResponse.data as any)?.payments) {
+        setEnquiries((enquiriesResponse.data as any).payments);
       }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
